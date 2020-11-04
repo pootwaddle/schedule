@@ -46,9 +46,9 @@ func main() {
 	}
 
 	//scheduler.Every(2).Seconds().NotImmediately().Run(job1)
-	scheduler.Every().Day().At("05:00").Run(fortune)
-	scheduler.Every().Day().At("02:20").Run(malware1)
-	scheduler.Every().Monday().At("06:20").Run(reserves)
+	scheduler.Every().Day().At("05:00:15").Run(fortune)
+	scheduler.Every().Day().At("06:35:15").Run(malware1)
+	scheduler.Every().Monday().At("06:20:15").Run(reserves)
 
 	// Keep the program from exiting.
 	runtime.Goexit()
