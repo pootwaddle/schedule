@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
+
 	//"time"
 
 	"github.com/carlescere/scheduler"
@@ -21,6 +23,7 @@ func main() {
 		if err != nil {
 			fmt.Println("whoops!", err)
 		}
+		time.Sleep(3 * time.Second)
 	}
 
 	malware1 := func() {
@@ -32,6 +35,7 @@ func main() {
 		if err != nil {
 			fmt.Println("whoops!", err)
 		}
+		time.Sleep(3 * time.Second)
 	}
 
 	reserves := func() {
@@ -43,6 +47,7 @@ func main() {
 		if err != nil {
 			fmt.Println("whoops!", err)
 		}
+		time.Sleep(3 * time.Second)
 	}
 
 	//scheduler.Every(2).Seconds().NotImmediately().Run(job1)
