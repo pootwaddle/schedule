@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
-	"runtime"
+	"sync"
 	"time"
 
 	"github.com/carlescere/scheduler"
@@ -17,17 +16,14 @@ type logMessage struct {
 	message string
 }
 
-var logChan = make(chan logMessage, 200)
+var logChan = make(chan logMessage)
 
 func logWrapper() {
 	//initialize logging
-	logfileName := fmt.Sprintf("schedule_%s", time.Now().Format("20060102"))
-	// Example of redirecting log output to a new file at runtime
-	newLogFile, err := os.OpenFile(filepath.Join("D:\\ARCHIVE\\"+logfileName+".log"), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
-	if err == nil {
-		rlog.SetOutput(newLogFile)
-		rlog.Info(os.Args[0] + " started")
-	}
+	logfileName := fmt.Sprintf("D:\\ARCHIVE\\schedule_%s.log", time.Now().Format("20060102"))
+	os.Setenv("RLOG_LOG_FILE", logfileName)
+	rlog.UpdateEnv()
+	rlog.Info(os.Args[0] + " started")
 
 	for v := range logChan {
 		switch v.level {
@@ -39,17 +35,12 @@ func logWrapper() {
 			rlog.Info(v.message)
 		case "Heartbeat":
 			rlog.Info(v.message)
-			newLogFile.Sync()
 		case "Rotate":
 			rlog.Info(v.message)
-			newLogFile.Sync()
-			logfileName := fmt.Sprintf("schedule_%s", time.Now().Format("20060102"))
-			// Example of redirecting log output to a new file at runtime
-			newLogFile, err := os.OpenFile(filepath.Join("D:\\ARCHIVE\\"+logfileName+".log"), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
-			if err == nil {
-
-				rlog.SetOutput(newLogFile)
-			}
+			//initialize logging
+			logfileName := fmt.Sprintf("D:\\ARCHIVE\\schedule_%s.log", time.Now().Format("20060102"))
+			os.Setenv("RLOG_LOG_FILE", logfileName)
+			rlog.UpdateEnv()
 			rlog.Info(fmt.Sprintf("new log filename: %s", logfileName))
 		}
 	}
@@ -57,14 +48,15 @@ func logWrapper() {
 
 func main() {
 
+	var wg sync.WaitGroup
+	wg.Add(1) //we don't ever do WaitGroup.Done, so we will always wait
+
 	go logWrapper()
 
 	fortune := func() {
 		funcName := "scheduleFortune"
 		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\FORTUN.BAT")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
+		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\FORTUN.BAT >nul")
 		err := cmd.Run()
 		if err != nil {
 			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
@@ -106,7 +98,7 @@ func main() {
 		logChan <- logMessage{level: "Heartbeat", message: funcName}
 	}
 
-	scheduler.Every(15).Minutes().Run(heartbeat)
+	scheduler.Every(30).Minutes().Run(heartbeat)
 	// scheduler.Every(5).Minutes().Run(fortune) //debug
 	scheduler.Every().Day().At("05:00:15").Run(fortune)
 	scheduler.Every().Day().At("06:35:15").Run(malware1)
@@ -114,5 +106,6 @@ func main() {
 	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
 
 	// Keep the program from exiting.
-	runtime.Goexit()
+	wg.Wait()
+	//runtime.Goexit()
 }
