@@ -12,8 +12,14 @@ import (
 	"github.com/romana/rlog"
 )
 
-func main() {
+type logMessage struct {
+	level   string
+	message string
+}
 
+var logChan = make(chan logMessage, 200)
+
+func logWrapper() {
 	//initialize logging
 	logfileName := fmt.Sprintf("schedule_%s", time.Now().Format("20060102"))
 	// Example of redirecting log output to a new file at runtime
@@ -23,52 +29,80 @@ func main() {
 		rlog.Info(os.Args[0] + " started")
 	}
 
+	for v := range logChan {
+		switch v.level {
+		case "Error":
+			rlog.Error(v.message)
+		case "Info":
+			rlog.Info(v.message)
+		case "Warn":
+			rlog.Info(v.message)
+		case "Rotate":
+			rlog.Info(v.message)
+			logfileName := fmt.Sprintf("schedule_%s", time.Now().Format("20060102"))
+			// Example of redirecting log output to a new file at runtime
+			newLogFile, err := os.OpenFile(filepath.Join("D:\\ARCHIVE\\"+logfileName+".log"), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
+			if err == nil {
+				rlog.SetOutput(newLogFile)
+			}
+			rlog.Info(fmt.Sprintf("new log filename: %s", logfileName))
+		}
+	}
+}
+
+func main() {
+
+	go logWrapper()
+
 	fortune := func() {
-		rlog.Info("scheduleFortune")
-		cmd := exec.Command("CMD", "/C D:\\ARCHIVE\\FORTUN.BAT")
+		funcName := "scheduleFortune"
+		logChan <- logMessage{level: "Info", message: funcName}
+		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\FORTUN.BAT")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
-			rlog.Error("scheduleFortune failed: ", err)
+			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
 		}
 	}
 
 	malware1 := func() {
-		rlog.Info("scheduleMalwareBytes")
-		cmd := exec.Command("CMD", "/C D:\\ARCHIVE\\mw1.bat")
+		funcName := "scheduleMalwareBytes"
+		logChan <- logMessage{level: "Info", message: funcName}
+		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\mw1.bat")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
-			rlog.Error("scheduleMalwareBytes failed:", err)
+			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
 		}
 	}
 
 	reserves := func() {
-		rlog.Info("scheduleReserves")
-		cmd := exec.Command("CMD", "/C D:\\ARCHIVE\\RESERVES.BAT")
+		funcName := "scheduleReserves"
+		logChan <- logMessage{level: "Info", message: funcName}
+		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\RESERVES.BAT")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
-			rlog.Error("scheduleReserves failed: ", err)
+			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
 		}
 	}
 
 	rotateLog := func() {
-		rlog.Info("rotateLog")
-		//initialize new log file
-		logfileName := fmt.Sprintf("cert-check_%s", time.Now().Format("20060102"))
-		// Example of redirecting log output to a new file at runtime
-		newLogFile, err := os.OpenFile(filepath.Join("D:\\ARCHIVE\\"+logfileName+".log"), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
-		if err == nil {
-			rlog.SetOutput(newLogFile)
-			rlog.Info(newLogFile)
-		}
+		funcName := "scheduleRotate"
+		logChan <- logMessage{level: "Info", message: funcName}
+		logChan <- logMessage{level: "Rotate", message: "new day"}
 	}
 
-	//scheduler.Every(2).Seconds().NotImmediately().Run(job1)
+	heartbeat := func() {
+		funcName := "Heartbeat"
+		logChan <- logMessage{level: "Info", message: funcName}
+	}
+
+	scheduler.Every(15).Minutes().Run(heartbeat)
+	// scheduler.Every(5).Minutes().Run(fortune) //debug
 	scheduler.Every().Day().At("05:00:15").Run(fortune)
 	scheduler.Every().Day().At("06:35:15").Run(malware1)
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
