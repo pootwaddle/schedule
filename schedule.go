@@ -37,6 +37,9 @@ func logWrapper() {
 			rlog.Info(v.message)
 		case "Warn":
 			rlog.Info(v.message)
+		case "Heartbeat":
+			rlog.Info(v.message)
+			newLogFile.Sync()
 		case "Rotate":
 			rlog.Info(v.message)
 			newLogFile.Sync()
@@ -100,7 +103,7 @@ func main() {
 
 	heartbeat := func() {
 		funcName := "Heartbeat"
-		logChan <- logMessage{level: "Info", message: funcName}
+		logChan <- logMessage{level: "Heartbeat", message: funcName}
 	}
 
 	scheduler.Every(15).Minutes().Run(heartbeat)
