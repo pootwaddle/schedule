@@ -39,10 +39,12 @@ func logWrapper() {
 			rlog.Info(v.message)
 		case "Rotate":
 			rlog.Info(v.message)
+			newLogFile.Sync()
 			logfileName := fmt.Sprintf("schedule_%s", time.Now().Format("20060102"))
 			// Example of redirecting log output to a new file at runtime
 			newLogFile, err := os.OpenFile(filepath.Join("D:\\ARCHIVE\\"+logfileName+".log"), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 			if err == nil {
+
 				rlog.SetOutput(newLogFile)
 			}
 			rlog.Info(fmt.Sprintf("new log filename: %s", logfileName))
