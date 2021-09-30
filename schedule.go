@@ -56,7 +56,11 @@ func main() {
 	fortune := func() {
 		funcName := "scheduleFortune"
 		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\FORTUN.BAT >nul")
+		param := fmt.Sprintf("D:\\ARCHIVE\\scheduleDetail_%s.log", time.Now().Format("20060102"))
+		if param == "" {
+			logChan <- logMessage{level: "Error", message: "os.Getenv RLOG_LOG_FILE is empty"}
+		}
+		cmd := exec.Command("CMD", fmt.Sprintf("/C C:\\AUTOJOB\\FORTUN.BAT >>%s", param))
 		err := cmd.Run()
 		if err != nil {
 			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
@@ -66,7 +70,8 @@ func main() {
 	malware1 := func() {
 		funcName := "scheduleMalwareBytes"
 		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\mw1 >nul")
+		param := fmt.Sprintf("D:\\ARCHIVE\\scheduleDetail_%s.log", time.Now().Format("20060102"))
+		cmd := exec.Command("CMD", fmt.Sprintf("/C C:\\AUTOJOB\\mw1 >>%s", param))
 		err := cmd.Run()
 		if err != nil {
 			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
@@ -76,7 +81,8 @@ func main() {
 	reserves := func() {
 		funcName := "scheduleReserves"
 		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\RESERVES.BAT >nul")
+		param := fmt.Sprintf("D:\\ARCHIVE\\scheduleDetail_%s.log", time.Now().Format("20060102"))
+		cmd := exec.Command("CMD", fmt.Sprintf("/C C:\\AUTOJOB\\RESERVES.BAT >>%s", param))
 		err := cmd.Run()
 		if err != nil {
 			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
@@ -95,7 +101,7 @@ func main() {
 	}
 
 	scheduler.Every(30).Minutes().Run(heartbeat)
-	//scheduler.Every(5).Minutes().Run(fortune) //debug
+	// scheduler.Every(5).Minutes().Run(fortune) //debug
 	scheduler.Every().Day().At("05:05:15").Run(fortune)
 	scheduler.Every().Day().At("06:35:15").Run(malware1)
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
