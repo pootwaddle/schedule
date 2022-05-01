@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -17,6 +18,7 @@ type logMessage struct {
 }
 
 var logChan = make(chan logMessage)
+var LogStartTime time.Time
 
 func logWrapper() {
 	for v := range logChan {
@@ -31,22 +33,37 @@ func logWrapper() {
 			rlog.Info(v.message)
 		case "Rotate":
 			rlog.Info(v.message)
-			//initialize logging
-			logfileName := fmt.Sprintf("D:\\ARCHIVE\\schedule_%s.log", time.Now().Format("20060102"))
-			os.Setenv("RLOG_LOG_FILE", logfileName)
-			rlog.UpdateEnv()
-			rlog.Info(fmt.Sprintf("new log filename: %s", logfileName))
+			LogStartTime = initLogging(LogStartTime)
 		}
 	}
 }
 
-func main() {
+func DateEqual(date1, date2 time.Time) bool {
+	y1, m1, d1 := date1.Date()
+	y2, m2, d2 := date2.Date()
+	return y1 == y2 && m1 == m2 && d1 == d2
+}
 
-	//initialize logging
-	logfileName := fmt.Sprintf("D:\\ARCHIVE\\schedule_%s.log", time.Now().Format("20060102"))
-	os.Setenv("RLOG_LOG_FILE", logfileName)
-	rlog.UpdateEnv()
-	rlog.Info(fmt.Sprintf("new log filename: %s", logfileName))
+func initLogging(t1 time.Time) time.Time {
+	if !DateEqual(t1, time.Now()) {
+		cfgBase := os.Getenv("RLOG_CONF") // C:\AUTOJOB\RLOG or ""
+		cfgF := filepath.Join(cfgBase, "schedule.conf")
+		logBase := os.Getenv("SCHEDULE_LOG_FILE") // E:\WEBSVC or ""
+		fn := filepath.Join(logBase, fmt.Sprintf("schedule_%s.log", time.Now().Format("20060102")))
+		err := os.WriteFile(cfgF, []byte("RLOG_LOG_FILE = "+fn), 0755)
+		if err != nil {
+			rlog.Error(err)
+		}
+		rlog.SetConfFile(cfgF)
+		rlog.Infof("Config from %s", cfgF)
+		rlog.Infof("Logging to %s", fn)
+		return time.Now()
+	}
+	return t1
+}
+
+func main() {
+	LogStartTime = initLogging(LogStartTime)
 
 	var wg sync.WaitGroup
 	wg.Add(1) //we don't ever do WaitGroup.Done, so we will always wait
