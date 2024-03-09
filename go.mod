@@ -7,4 +7,4 @@ require (
 	github.com/romana/rlog v0.0.0-20220412051723-c08f605858a9
 )
 
-require github.com/stretchr/testify v1.8.4 // indirect
+require github.com/stretchr/testify v1.9.0 // indirect

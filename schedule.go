@@ -91,18 +91,6 @@ func main() {
 		}
 	}
 
-	/*
-		malware1 := func() {
-			funcName := "scheduleMalwareBytes"
-			logChan <- logMessage{level: "Info", message: funcName}
-			cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\mw1")
-			err := cmd.Run()
-			if err != nil {
-				logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
-			}
-		}
-	*/
-
 	reserves := func() {
 		funcName := "scheduleReserves"
 		logChan <- logMessage{level: "Info", message: funcName}
@@ -128,7 +116,6 @@ func main() {
 	scheduler.Every(30).Minutes().Run(heartbeat)
 	scheduler.Every(3).Minutes().Run(grey)
 	scheduler.Every().Day().At("05:05:15").Run(fortune)
-	// scheduler.Every().Day().At("06:35:15").Run(malware1)
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
 	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
 
