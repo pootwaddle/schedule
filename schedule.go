@@ -84,7 +84,7 @@ func main() {
 	grey := func() {
 		funcName := "scheduleGrey"
 		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\grey.bat")
+		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\greylist.bat")
 		err := cmd.Run()
 		if err != nil {
 			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
