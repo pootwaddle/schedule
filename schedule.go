@@ -1,42 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"os/exec"
-	"path/filepath"
-	"sync"
 	"time"
 
 	"github.com/carlescere/scheduler"
-	"github.com/romana/rlog"
+	"github.com/pootwaddle/logger"
 )
-
-type logMessage struct {
-	level   string
-	message string
-}
-
-var logChan = make(chan logMessage)
-var LogStartTime time.Time
-
-func logWrapper() {
-	for v := range logChan {
-		switch v.level {
-		case "Error":
-			rlog.Error(v.message)
-		case "Info":
-			rlog.Info(v.message)
-		case "Warn":
-			rlog.Info(v.message)
-		case "Heartbeat":
-			rlog.Info(v.message)
-		case "Rotate":
-			rlog.Info(v.message)
-			LogStartTime = initLogging(LogStartTime)
-		}
-	}
-}
 
 func DateEqual(date1, date2 time.Time) bool {
 	y1, m1, d1 := date1.Date()
@@ -44,82 +14,113 @@ func DateEqual(date1, date2 time.Time) bool {
 	return y1 == y2 && m1 == m2 && d1 == d2
 }
 
-func initLogging(t1 time.Time) time.Time {
-	if !DateEqual(t1, time.Now()) {
-		cfgBase := os.Getenv("RLOG_CONF") // C:\AUTOJOB\RLOG or ""
-		cfgF := filepath.Join(cfgBase, "schedule.conf")
-		logBase := os.Getenv("SCHEDULE_LOG_FILE") // E:\WEBSVC or ""
-		fn := filepath.Join(logBase, fmt.Sprintf("schedule_%s.log", time.Now().Format("20060102")))
-		err := os.WriteFile(cfgF, []byte("RLOG_LOG_FILE = "+fn), 0755)
-		if err != nil {
-			rlog.Error(err)
-		}
-		rlog.SetConfFile(cfgF)
-		rlog.Infof("Config from %s", cfgF)
-		rlog.Infof("Logging to %s", fn)
+// You can reload logger on log rotation if needed, or just rely on its internal logic.
+func rotateLogging(last time.Time) time.Time {
+	if !DateEqual(last, time.Now()) {
+		logger.ReloadLogger()
+		logger.Infof("Log rotated for new day: %s", time.Now().Format("2006-01-02"))
 		return time.Now()
 	}
-	return t1
+	return last
 }
 
 func main() {
-	LogStartTime = initLogging(LogStartTime)
+	defer logger.CloseLogger()
+	logger.ReloadLogger() // Ensures env config is loaded at start
 
-	var wg sync.WaitGroup
-	wg.Add(1) //we don't ever do WaitGroup.Done, so we will always wait
-	defer wg.Done()
+	logStartTime := time.Now()
 
-	go logWrapper()
+	backup := func() {
+		funcName := "scheduleBackup"
+		logger.Infof("Starting %s", funcName)
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_c_drive_to_tech1.bat")
+		err := cmd.Run()
+		if err != nil {
+			logger.Errorf("%s failed: %v", funcName, err)
+		}
+	}
+
+	deloldlogs := func() {
+		funcName := "scheduleDelOldLogs"
+		logger.Infof("Starting %s", funcName)
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\DELAGE.BAT")
+		err := cmd.Run()
+		if err != nil {
+			logger.Errorf("%s failed: %v", funcName, err)
+		}
+	}
 
 	fortune := func() {
 		funcName := "scheduleFortune"
-		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\FORTUN.BAT")
+		logger.Infof("Starting %s", funcName)
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\FORTUN.BAT")
 		err := cmd.Run()
 		if err != nil {
-			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
+			logger.Errorf("%s failed: %v", funcName, err)
+		}
+	}
+
+	gem := func() {
+		funcName := "scheduleGem"
+		logger.Infof("Starting %s", funcName)
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\gem.bat")
+		err := cmd.Run()
+		if err != nil {
+			logger.Errorf("%s failed: %v", funcName, err)
 		}
 	}
 
 	grey := func() {
 		funcName := "scheduleGrey"
-		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\greylist.bat")
+		logger.Infof("Starting %s", funcName)
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\greylist.bat")
 		err := cmd.Run()
 		if err != nil {
-			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
+			logger.Errorf("%s failed: %v", funcName, err)
+		}
+	}
+
+	logthings := func() {
+		funcName := "scheduleLogThings"
+		logger.Infof("Starting %s", funcName)
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\logthings.bat")
+		err := cmd.Run()
+		if err != nil {
+			logger.Errorf("%s failed: %v", funcName, err)
 		}
 	}
 
 	reserves := func() {
 		funcName := "scheduleReserves"
-		logChan <- logMessage{level: "Info", message: funcName}
-		cmd := exec.Command("CMD", "/C C:\\AUTOJOB\\RESERVES.BAT")
+		logger.Infof("Starting %s", funcName)
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\RESERVES.BAT")
 		err := cmd.Run()
 		if err != nil {
-			logChan <- logMessage{level: "Error", message: fmt.Sprintf("%s failed: %s", funcName, err)}
+			logger.Errorf("%s failed: %v", funcName, err)
 		}
 	}
 
+	// This function will check for new day and rotate logs if needed.
+	var lastRotation = logStartTime
 	rotateLog := func() {
-		funcName := "scheduleRotate"
-		logChan <- logMessage{level: "Info", message: funcName}
-		logChan <- logMessage{level: "Rotate", message: "new day"}
-
+		logger.Info("Checking if log rotation needed...")
+		lastRotation = rotateLogging(lastRotation)
 	}
 
 	heartbeat := func() {
-		funcName := "Heartbeat"
-		logChan <- logMessage{level: "Heartbeat", message: funcName}
+		logger.Info("Heartbeat - scheduler is alive.")
 	}
 
 	scheduler.Every(30).Minutes().Run(heartbeat)
-	scheduler.Every(3).Minutes().Run(grey)
-	scheduler.Every().Day().At("05:05:15").Run(fortune)
+	scheduler.Every(2).Minutes().Run(grey)
+	scheduler.Every(31).Minutes().Run(logthings)
+	scheduler.Every().Day().At("00:23:23").Run(backup)
+	scheduler.Every().Day().At("23:55:55").Run(deloldlogs)
+	scheduler.Every().Day().At("03:33:33").Run(fortune)
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
+	scheduler.Every().Friday().At("03:33:33").Run(gem)
 	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
 
-	// Keep the program from exiting.
-	wg.Wait()
-	//runtime.Goexit()
+	// Block forever in idiomatic Go style
+	select {}
 }
