@@ -31,8 +31,8 @@ func main() {
 	logStartTime := time.Now()
 
 	backup := func() {
-		funcName := "scheduleBackup"
-		logger.Infof("Starting %s", funcName)
+		funcName := "Backup 💾"
+		logger.Infof("Running %s", funcName)
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_c_drive_to_tech1.bat")
 		err := cmd.Run()
 		if err != nil {
@@ -41,8 +41,8 @@ func main() {
 	}
 
 	deloldlogs := func() {
-		funcName := "scheduleDelOldLogs"
-		logger.Infof("Starting %s", funcName)
+		funcName := "DelOldLogs 🗑️"
+		logger.Infof("Running %s", funcName)
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\DELAGE.BAT")
 		err := cmd.Run()
 		if err != nil {
@@ -51,8 +51,8 @@ func main() {
 	}
 
 	fortune := func() {
-		funcName := "scheduleFortune"
-		logger.Infof("Starting %s", funcName)
+		funcName := "Fortune 🥠"
+		logger.Infof("Running %s", funcName)
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\FORTUN.BAT")
 		err := cmd.Run()
 		if err != nil {
@@ -61,8 +61,8 @@ func main() {
 	}
 
 	gem := func() {
-		funcName := "scheduleGem"
-		logger.Infof("Starting %s", funcName)
+		funcName := "Gem 💎"
+		logger.Infof("Running %s", funcName)
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\gem.bat")
 		err := cmd.Run()
 		if err != nil {
@@ -71,8 +71,8 @@ func main() {
 	}
 
 	grey := func() {
-		funcName := "scheduleGrey"
-		logger.Infof("Starting %s", funcName)
+		funcName := "Grey 🦉"
+		logger.Infof("Running %s", funcName)
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\greylist.bat")
 		err := cmd.Run()
 		if err != nil {
@@ -81,8 +81,8 @@ func main() {
 	}
 
 	logthings := func() {
-		funcName := "scheduleLogThings"
-		logger.Infof("Starting %s", funcName)
+		funcName := "LogThings 📋"
+		logger.Infof("Running %s", funcName)
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\logthings.bat")
 		err := cmd.Run()
 		if err != nil {
@@ -91,8 +91,8 @@ func main() {
 	}
 
 	reserves := func() {
-		funcName := "scheduleReserves"
-		logger.Infof("Starting %s", funcName)
+		funcName := "Reserves 🚒"
+		logger.Infof("Running %s", funcName)
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\RESERVES.BAT")
 		err := cmd.Run()
 		if err != nil {
@@ -103,12 +103,15 @@ func main() {
 	// This function will check for new day and rotate logs if needed.
 	var lastRotation = logStartTime
 	rotateLog := func() {
+		funcName := "RotateLog 🔄"
+		logger.Infof("Running %s", funcName)
+
 		logger.Info("Checking if log rotation needed...")
 		lastRotation = rotateLogging(lastRotation)
 	}
 
 	heartbeat := func() {
-		logger.Info("Heartbeat - scheduler is alive.")
+		logger.Info("Heartbeat - scheduler is alive. 💓")
 	}
 
 	scheduler.Every(30).Minutes().Run(heartbeat)
