@@ -73,7 +73,7 @@ func main() {
 	grey := func() {
 		displayName := "Grey 🦉"
 		slogger.With("job", displayName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\greylist.bat")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\grey.bat")
 		err := cmd.Run()
 		if err != nil {
 			slogger.With("job", displayName, "error", err).Error("Job failed")
