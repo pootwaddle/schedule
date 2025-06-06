@@ -144,9 +144,10 @@ func main() {
 
 	scheduler.Every(30).Minutes().Run(heartbeat)
 	scheduler.Every(2).Minutes().Run(grey)
-	scheduler.Every(5).Minutes().Run(logsumm)
 	scheduler.Every(2).Minutes().Run(spamparse)
 	scheduler.Every(5).Minutes().Run(logparse)
+	scheduler.Every().Day().At("11:59:55").Run(logsumm)
+	scheduler.Every().Day().At("23:59:55").Run(logsumm)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("23:55:55").Run(deloldlogs)
 	scheduler.Every().Day().At("03:33:33").Run(fortune)
