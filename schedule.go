@@ -31,80 +31,110 @@ func main() {
 	logStartTime := time.Now()
 
 	backup := func() {
-		funcName := "Backup 💾"
-		slogger.With("job", funcName).Info("Running job")
+		displayName := "Backup 💾"
+		slogger.With("job", displayName).Info("Running job")
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_c_drive_to_tech1.bat")
 		err := cmd.Run()
 		if err != nil {
-			slogger.With("job", funcName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err).Error("Job failed")
 		}
 	}
 
 	deloldlogs := func() {
-		funcName := "DelOldLogs 🗑️"
-		slogger.With("job", funcName).Info("Running job")
+		displayName := "DelOldLogs 🗑️"
+		slogger.With("job", displayName).Info("Running job")
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\DELAGE.BAT")
 		err := cmd.Run()
 		if err != nil {
-			slogger.With("job", funcName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err).Error("Job failed")
 		}
 	}
 
 	fortune := func() {
-		funcName := "Fortune 🥠"
-		slogger.With("job", funcName).Info("Running job")
+		displayName := "Fortune 🥠"
+		slogger.With("job", displayName).Info("Running job")
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\FORTUN.BAT")
 		err := cmd.Run()
 		if err != nil {
-			slogger.With("job", funcName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err).Error("Job failed")
 		}
 	}
 
 	gem := func() {
-		funcName := "Gem 💎"
-		slogger.With("job", funcName).Info("Running job")
+		displayName := "Gem 💎"
+		slogger.With("job", displayName).Info("Running job")
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\gem.bat")
 		err := cmd.Run()
 		if err != nil {
-			slogger.With("job", funcName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err).Error("Job failed")
 		}
 	}
 
 	grey := func() {
-		funcName := "Grey 🦉"
-		slogger.With("job", funcName).Info("Running job")
+		displayName := "Grey 🦉"
+		slogger.With("job", displayName).Info("Running job")
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\greylist.bat")
 		err := cmd.Run()
 		if err != nil {
-			slogger.With("job", funcName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err).Error("Job failed")
 		}
 	}
 
-	logthings := func() {
-		funcName := "LogThings 📋"
-		slogger.With("job", funcName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\logthings.bat")
+	logsumm := func() {
+		displayName := "LogSumm 📋"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\logsumm.bat")
 		err := cmd.Run()
 		if err != nil {
-			slogger.With("job", funcName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
+	spamparse := func() {
+		displayName := "SpamParse 🧱"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\spamparse.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
+	logparse := func() {
+		displayName := "LogParse 📝"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\spamparse.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
+	delage := func() {
+		displayName := "DelAge 🗑️"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\delage.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
 		}
 	}
 
 	reserves := func() {
-		funcName := "Reserves 🚒"
-		slogger.With("job", funcName).Info("Running job")
+		displayName := "Reserves 🚒"
+		slogger.With("job", displayName).Info("Running job")
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\RESERVES.BAT")
 		err := cmd.Run()
 		if err != nil {
-			slogger.With("job", funcName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err).Error("Job failed")
 		}
 	}
 
 	// This function will check for new day and rotate logs if needed.
 	var lastRotation = logStartTime
 	rotateLog := func() {
-		funcName := "RotateLog 🔄"
-		slogger.With("job", funcName).Info("Running job")
+		displayName := "RotateLog 🔄"
+		slogger.With("job", displayName).Info("Running job")
 		lastRotation = rotateLogging(lastRotation)
 	}
 
@@ -114,13 +144,16 @@ func main() {
 
 	scheduler.Every(30).Minutes().Run(heartbeat)
 	scheduler.Every(2).Minutes().Run(grey)
-	scheduler.Every(31).Minutes().Run(logthings)
+	scheduler.Every(5).Minutes().Run(logsumm)
+	scheduler.Every(2).Minutes().Run(spamparse)
+	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("23:55:55").Run(deloldlogs)
 	scheduler.Every().Day().At("03:33:33").Run(fortune)
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
 	scheduler.Every().Friday().At("03:33:33").Run(gem)
 	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
+	scheduler.Every().Day().At("00:17:17").Run(delage)
 
 	// Block forever in idiomatic Go style
 	select {}
