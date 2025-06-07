@@ -27,6 +27,7 @@ func rotateLogging(last time.Time) time.Time {
 func main() {
 	defer slogger.CloseLogger()
 	slogger.ReloadLogger() // Ensures env config is loaded at start
+	slogger.Info("👋 Starting scheduler")
 
 	logStartTime := time.Now()
 
@@ -70,10 +71,10 @@ func main() {
 		}
 	}
 
-	grey := func() {
-		displayName := "Grey 🦉"
+	cleangrey := func() {
+		displayName := "CleanGrey 🦉"
 		slogger.With("job", displayName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\grey.bat")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\cleangrey.bat")
 		err := cmd.Run()
 		if err != nil {
 			slogger.With("job", displayName, "error", err).Error("Job failed")
@@ -143,7 +144,7 @@ func main() {
 	}
 
 	scheduler.Every(30).Minutes().Run(heartbeat)
-	scheduler.Every(2).Minutes().Run(grey)
+	scheduler.Every(2).Minutes().Run(cleangrey)
 	scheduler.Every(2).Minutes().Run(spamparse)
 	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every().Day().At("11:59:55").Run(logsumm)
