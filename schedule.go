@@ -140,7 +140,7 @@ func main() {
 	}
 
 	heartbeat := func() {
-		slogger.With("job", "heartbeat 💓").Info("Running Job")
+		slogger.With("job", "Heartbeat 💓").Info("Running Job")
 	}
 
 	scheduler.Every(30).Minutes().Run(heartbeat)
