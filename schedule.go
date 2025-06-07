@@ -103,7 +103,7 @@ func main() {
 	logparse := func() {
 		displayName := "LogParse 📝"
 		slogger.With("job", displayName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\spamparse.bat")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\logparse.bat")
 		err := cmd.Run()
 		if err != nil {
 			slogger.With("job", displayName, "error", err).Error("Job failed")
