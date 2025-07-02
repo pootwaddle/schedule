@@ -61,6 +61,16 @@ func main() {
 		}
 	}
 
+	getfit := func() {
+		displayName := "GetFit 💪"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\getfit.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
 	gem := func() {
 		displayName := "Gem 💎"
 		slogger.With("job", displayName).Info("Running job")
@@ -152,6 +162,7 @@ func main() {
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("23:55:55").Run(deloldlogs)
 	scheduler.Every().Day().At("03:33:33").Run(fortune)
+	scheduler.Every().Day().At("03:33:35").Run(getfit)
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
 	scheduler.Every().Friday().At("03:33:33").Run(gem)
 	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
