@@ -61,6 +61,16 @@ func main() {
 		}
 	}
 
+	birdbuddy := func() {
+		displayName := "BirdBuddy 🐦"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\birdbuddy.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
 	getfit := func() {
 		displayName := "GetFit 💪"
 		slogger.With("job", displayName).Info("Running job")
@@ -159,6 +169,7 @@ func main() {
 	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every().Day().At("11:59:55").Run(logsumm)
 	scheduler.Every().Day().At("23:59:55").Run(logsumm)
+	scheduler.Every().Day().At("00:00:05").Run(birdbuddy)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("23:55:55").Run(deloldlogs)
 	scheduler.Every().Day().At("03:33:33").Run(fortune)
