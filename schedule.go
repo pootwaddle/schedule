@@ -71,6 +71,16 @@ func main() {
 		}
 	}
 
+	daytmpl := func() {
+		displayName := "Daily Templates 📝"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\daytmpl.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
 	getfit := func() {
 		displayName := "GetFit 💪"
 		slogger.With("job", displayName).Info("Running job")
@@ -163,21 +173,22 @@ func main() {
 		slogger.With("job", "Heartbeat 💓").Info("Running Job")
 	}
 
-	scheduler.Every(30).Minutes().Run(heartbeat)
 	scheduler.Every(2).Minutes().Run(cleangrey)
-	scheduler.Every(2).Minutes().Run(spamparse)
-	scheduler.Every(5).Minutes().Run(logparse)
-	scheduler.Every().Day().At("11:59:55").Run(logsumm)
-	scheduler.Every().Day().At("23:59:55").Run(logsumm)
+	scheduler.Every(7).Minutes().Run(spamparse)
+	scheduler.Every(7).Minutes().Run(logparse)
+	scheduler.Every(30).Minutes().Run(heartbeat)
+	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
 	scheduler.Every().Day().At("00:00:05").Run(birdbuddy)
+	scheduler.Every().Day().At("00:00:15").Run(daytmpl)
+	scheduler.Every().Day().At("00:17:17").Run(delage)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
-	scheduler.Every().Day().At("23:55:55").Run(deloldlogs)
-	scheduler.Every().Day().At("03:33:33").Run(fortune)
 	scheduler.Every().Day().At("03:33:35").Run(getfit)
+	scheduler.Every().Day().At("11:59:55").Run(logsumm)
+	scheduler.Every().Day().At("23:55:55").Run(deloldlogs)
+	scheduler.Every().Day().At("23:59:55").Run(logsumm)
+	scheduler.Every().Day().At("03:33:33").Run(fortune)
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
 	scheduler.Every().Friday().At("03:33:33").Run(gem)
-	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
-	scheduler.Every().Day().At("00:17:17").Run(delage)
 
 	// Block forever in idiomatic Go style
 	select {}
