@@ -104,7 +104,7 @@ func main() {
 	cleangrey := func() {
 		displayName := "CleanGrey 🦉"
 		slogger.With("job", displayName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\cleangrey.bat")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\grey.bat")
 		err := cmd.Run()
 		if err != nil {
 			slogger.With("job", displayName, "error", err).Error("Job failed")
@@ -188,9 +188,11 @@ func main() {
 	scheduler.Every().Friday().At("03:33:38").Run(gem)
 
 	scheduler.Every(2).Minutes().Run(cleangrey)
+	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every(7).Minutes().Run(spamparse)
-	scheduler.Every(7).Minutes().Run(logparse)
-	scheduler.Every(30).Minutes().Run(heartbeat)
+	scheduler.Every(9).Minutes().Run(heartbeat)
+
+	slogger.Info("✅ All jobs scheduled, waiting for execution...")
 
 	// Block forever in idiomatic Go style
 	select {}
