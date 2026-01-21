@@ -187,7 +187,7 @@ func main() {
 	scheduler.Every().Day().At("00:02:02").Run(deloldlogs)
 	scheduler.Every().Day().At("00:03:03").Run(delage)
 	scheduler.Every().Day().At("00:05:05").Run(birdbuddy)
-	scheduler.Every().Day().At("00:05:10").Run(webby)
+	scheduler.Every().Day().At("01:05:10").Run(webby)
 	scheduler.Every().Day().At("00:05:15").Run(daytmpl)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("03:33:33").Run(getfit)
