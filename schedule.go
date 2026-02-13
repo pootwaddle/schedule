@@ -171,6 +171,16 @@ func main() {
 		}
 	}
 
+	rivercheck := func() {
+		displayName := "RiverCheck 🏞️"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\river.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
 	// This function will check for new day and rotate logs if needed.
 	var lastRotation = logStartTime
 	rotateLog := func() {
@@ -194,6 +204,10 @@ func main() {
 	scheduler.Every().Day().At("03:33:35").Run(fortune)
 	scheduler.Every().Day().At("11:59:55").Run(logsumm)
 	scheduler.Every().Day().At("23:59:55").Run(logsumm)
+
+	scheduler.Every().Day().At("05:00:00").Run(rivercheck)
+	scheduler.Every().Day().At("12:00:00").Run(rivercheck)
+	scheduler.Every().Day().At("19:00:00").Run(rivercheck)
 
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
 	scheduler.Every().Friday().At("03:33:38").Run(gem)
