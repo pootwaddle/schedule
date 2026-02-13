@@ -193,29 +193,31 @@ func main() {
 		slogger.With("job", "Heartbeat 💓").Info("Running Job")
 	}
 
+	// daily jobs
 	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
 	scheduler.Every().Day().At("00:02:02").Run(deloldlogs)
 	scheduler.Every().Day().At("00:03:03").Run(delage)
-	scheduler.Every().Day().At("00:05:05").Run(birdbuddy)
-	scheduler.Every().Day().At("01:05:10").Run(webby)
-	scheduler.Every().Day().At("00:05:15").Run(daytmpl)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
+	scheduler.Every().Day().At("03:33:05").Run(birdbuddy)
+	scheduler.Every().Day().At("03:33:10").Run(webby)
+	scheduler.Every().Day().At("03:33:15").Run(daytmpl)
 	scheduler.Every().Day().At("03:33:33").Run(getfit)
 	scheduler.Every().Day().At("03:33:35").Run(fortune)
+
+	// email summaries
 	scheduler.Every().Day().At("11:59:55").Run(logsumm)
 	scheduler.Every().Day().At("23:59:55").Run(logsumm)
 
-	scheduler.Every().Day().At("05:00:00").Run(rivercheck)
-	scheduler.Every().Day().At("12:00:00").Run(rivercheck)
-	scheduler.Every().Day().At("19:00:00").Run(rivercheck)
-
+	// weekly jobs
 	scheduler.Every().Monday().At("06:20:15").Run(reserves)
 	scheduler.Every().Friday().At("03:33:38").Run(gem)
 
+	// periodic jobs
 	scheduler.Every(2).Minutes().Run(cleangrey)
 	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every(7).Minutes().Run(spamparse)
 	scheduler.Every(9).Minutes().Run(heartbeat)
+	scheduler.Every(303).Minutes().Run(rivercheck)
 
 	slogger.Info("✅ All jobs scheduled, waiting for execution...")
 

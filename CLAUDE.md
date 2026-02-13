@@ -22,10 +22,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 00:00:01 | RotateLog | (internal) | Log file rotation |
 | 00:02:02 | DelOldLogs | `DELAGE.BAT` | Delete old log files |
 | 00:03:03 | DelAge | `delage.bat` | File retention cleanup |
-| 00:05:05 | BirdBuddy | `birdbuddy.bat` | Bird Buddy data processing |
-| 00:05:15 | DailyTemplates | `daytmpl.bat` | Generate daily markdown files |
 | 00:23:23 | Backup | `backup_c_drive_to_tech1.bat` | C: drive backup |
-| 01:05:10 | WebbyStats | `webby.bat` | Web statistics processing |
+| 03:33:05 | BirdBuddy | `birdbuddy.bat` | Bird Buddy data processing |
+| 03:33:10 | WebbyStats | `webby.bat` | Web statistics processing |
+| 03:33:15 | DailyTemplates | `daytmpl.bat` | Generate daily markdown files |
 | 03:33:33 | GetFit | `getfit.bat` | Fitness data processing |
 | 03:33:35 | Fortune | `FORTUN.BAT` | Fortune/joke generation |
 | 11:59:55 | LogSumm | `logsumm.bat` | Email log summary (noon) |
@@ -34,8 +34,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Weekly Jobs
 | Schedule | Job | Batch File | Purpose |
 |----------|-----|-----------|---------|
-| Monday 06:20 | Reserves | `RESERVES.BAT` | Fire department reserves |
-| Friday 03:33 | Gem | `gem.bat` | Gem processing |
+| Monday 06:20:15 | Reserves | `RESERVES.BAT` | Fire department reserves |
+| Friday 03:33:38 | Gem | `gem.bat` | Gem processing |
 
 ### Recurring Jobs
 | Interval | Job | Batch File | Purpose |
@@ -44,6 +44,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 5 min | LogParse | `logparse.bat` | SMTP log parsing |
 | 7 min | SpamParse | `spamparse.bat` | Spam analysis |
 | 9 min | Heartbeat | (internal) | Liveness log message |
+| 303 min | RiverCheck | `river.bat` | River level check (~5h 3m) |
 
 ## Architecture
 
