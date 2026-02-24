@@ -1,6 +1,6 @@
 module github.com/pootwaddle/schedule
 
-go 1.25.6
+go 1.26.0
 
 require (
 	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
