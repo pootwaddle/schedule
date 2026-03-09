@@ -34,7 +34,7 @@ func main() {
 	backup := func() {
 		displayName := "Backup 💾"
 		slogger.With("job", displayName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_c_drive_to_tech1.bat")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_to brooks.bat")
 		err := cmd.Run()
 		if err != nil {
 			slogger.With("job", displayName, "error", err).Error("Job failed")
@@ -45,6 +45,16 @@ func main() {
 		displayName := "DelOldLogs 🗑️"
 		slogger.With("job", displayName).Info("Running job")
 		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\DELAGE.BAT")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
+	me_archiver := func() {
+		displayName := "ME_Archiver 📁"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\me_archiver.bat")
 		err := cmd.Run()
 		if err != nil {
 			slogger.With("job", displayName, "error", err).Error("Job failed")
@@ -194,8 +204,9 @@ func main() {
 	}
 
 	// daily jobs
-	scheduler.Every().Day().At("00:00:01").Run(rotateLog)
-	scheduler.Every().Day().At("00:02:02").Run(deloldlogs)
+	scheduler.Every().Day().At("00:02:01").Run(rotateLog)
+	scheduler.Every().Day().At("00:05:05").Run(me_archiver)
+	scheduler.Every().Day().At("00:08:08").Run(deloldlogs)
 	scheduler.Every().Day().At("00:03:03").Run(delage)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("03:33:05").Run(birdbuddy)
