@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-**schedule** is a Go-based job scheduler that replaces/supplements Windows Task Scheduler for automating batch jobs on the MOE server. It runs as a long-running service, executing batch files at configured times.
+**schedule** is a Go-based job scheduler that replaces/supplements Windows Task Scheduler for automating batch jobs on the SKELTON server. It runs as a long-running service, executing batch files at configured times.
 
 **Module**: `github.com/pootwaddle/schedule`
 **Type**: Executable (service)
@@ -22,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 00:00:01 | RotateLog | (internal) | Log file rotation |
 | 00:02:02 | DelOldLogs | `DELAGE.BAT` | Delete old log files |
 | 00:03:03 | DelAge | `delage.bat` | File retention cleanup |
-| 00:23:23 | Backup | `backup_c_drive_to_tech1.bat` | C: drive backup |
+| 00:23:23 | Backup | `backup_to_brooks.bat` | C: and D: drive backup to Brooks NAS |
 | 03:33:05 | BirdBuddy | `birdbuddy.bat` | Bird Buddy data processing |
 | 03:33:10 | WebbyStats | `webby.bat` | Web statistics processing |
 | 03:33:15 | DailyTemplates | `daytmpl.bat` | Generate daily markdown files |
@@ -61,6 +61,6 @@ go build
 
 ## Important Notes
 
-- Stop `schedule.exe` on MOE before deploying new version.
-- All batch files are at `C:\AUTOJOB\` on the MOE server.
+- Stop `schedule.exe` on SKELTON before deploying new version.
+- All batch files are at `C:\AUTOJOB\` on the SKELTON server.
 - Runs indefinitely - blocks with `select{}` after scheduling all jobs.

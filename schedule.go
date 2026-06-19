@@ -34,10 +34,10 @@ func main() {
 	backup := func() {
 		displayName := "Backup 💾"
 		slogger.With("job", displayName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_to brooks.bat")
-		err := cmd.Run()
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_to_brooks.bat")
+		out, err := cmd.CombinedOutput()
 		if err != nil {
-			slogger.With("job", displayName, "error", err).Error("Job failed")
+			slogger.With("job", displayName, "error", err, "output", string(out)).Error("Job failed")
 		}
 	}
 
@@ -216,8 +216,8 @@ func main() {
 	scheduler.Every(2).Minutes().Run(cleangrey)
 	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every(7).Minutes().Run(spamparse)
-	scheduler.Every(9).Minutes().Run(heartbeat)
-	scheduler.Every(303).Minutes().Run(rivercheck)
+	scheduler.Every(30).Minutes().Run(heartbeat)
+	scheduler.Every(79).Minutes().Run(rivercheck)
 
 	slogger.Info("✅ All jobs scheduled, waiting for execution...")
 
