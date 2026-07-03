@@ -131,6 +131,16 @@ func main() {
 		}
 	}
 
+	websum := func() {
+		displayName := "WebSumm 📋"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\websum.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
 	spamparse := func() {
 		displayName := "SpamParse 🧱"
 		slogger.With("job", displayName).Info("Running job")
@@ -203,6 +213,7 @@ func main() {
 	scheduler.Every().Day().At("03:33:15").Run(daytmpl)
 	scheduler.Every().Day().At("03:33:33").Run(getfit)
 	scheduler.Every().Day().At("03:33:35").Run(fortune)
+	scheduler.Every().Day().At("04:04:04").Run(websum)
 
 	// email summaries
 	scheduler.Every().Day().At("11:59:55").Run(logsumm)
@@ -217,7 +228,7 @@ func main() {
 	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every(7).Minutes().Run(spamparse)
 	scheduler.Every(30).Minutes().Run(heartbeat)
-	scheduler.Every(79).Minutes().Run(rivercheck)
+	scheduler.Every(89).Minutes().Run(rivercheck)
 
 	slogger.Info("✅ All jobs scheduled, waiting for execution...")
 
