@@ -228,7 +228,7 @@ func main() {
 	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every(7).Minutes().Run(spamparse)
 	scheduler.Every(30).Minutes().Run(heartbeat)
-	scheduler.Every(89).Minutes().Run(rivercheck)
+	scheduler.Every(60).Minutes().Run(rivercheck)
 
 	slogger.Info("✅ All jobs scheduled, waiting for execution...")
 
