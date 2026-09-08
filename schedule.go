@@ -208,12 +208,26 @@ func main() {
 	scheduler.Every().Day().At("00:05:05").Run(me_archiver)
 	scheduler.Every().Day().At("00:03:03").Run(delage)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
-	scheduler.Every().Day().At("03:33:05").Run(birdbuddy)
 	scheduler.Every().Day().At("03:33:10").Run(webby)
 	scheduler.Every().Day().At("03:33:15").Run(daytmpl)
 	scheduler.Every().Day().At("03:33:33").Run(getfit)
 	scheduler.Every().Day().At("03:33:35").Run(fortune)
 	scheduler.Every().Day().At("04:04:04").Run(websum)
+	scheduler.Every().Day().At("07:33:05").Run(birdbuddy)
+
+	//river checks
+	scheduler.Every().Day().At("03:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("04:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("05:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("06:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("07:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("09:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("11:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("13:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("15:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("17:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("19:03:03").Run(rivercheck)
+	scheduler.Every().Day().At("21:03:03").Run(rivercheck)
 
 	// email summaries
 	scheduler.Every().Day().At("11:59:55").Run(logsumm)
@@ -228,7 +242,7 @@ func main() {
 	scheduler.Every(5).Minutes().Run(logparse)
 	scheduler.Every(7).Minutes().Run(spamparse)
 	scheduler.Every(30).Minutes().Run(heartbeat)
-	scheduler.Every(60).Minutes().Run(rivercheck)
+	// scheduler.Every(60).Minutes().Run(rivercheck)
 
 	slogger.Info("✅ All jobs scheduled, waiting for execution...")
 
