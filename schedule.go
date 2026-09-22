@@ -161,6 +161,16 @@ func main() {
 		}
 	}
 
+	googlesum := func() {
+		displayName := "GoogleSumm 📈"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\googlesumm.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
 	spamparse := func() {
 		displayName := "SpamParse 🧱"
 		slogger.With("job", displayName).Info("Running job")
@@ -234,6 +244,7 @@ func main() {
 	scheduler.Every().Day().At("03:33:35").Run(fortune)
 	scheduler.Every().Day().At("03:45:10").Run(ga4)
 	scheduler.Every().Day().At("03:45:15").Run(gsc)
+	scheduler.Every().Day().At("03:50:00").Run(googlesum)
 	scheduler.Every().Day().At("04:04:04").Run(websum)
 	scheduler.Every().Day().At("07:33:05").Run(birdbuddy)
 

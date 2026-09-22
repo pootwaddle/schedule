@@ -28,6 +28,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 03:33:15 | DailyTemplates | `daytmpl.bat` | Generate daily markdown files |
 | 03:33:33 | GetFit | `getfit.bat` | Fitness data processing |
 | 03:33:35 | Fortune | `FORTUN.BAT` | Fortune/joke generation |
+| 03:45:10 | GA4Report | `ga4.bat` | Google Analytics daily collection |
+| 03:45:15 | GSCReport | `gsc.bat` | Search Console daily collection |
+| 03:50:00 | GoogleSumm | `googlesumm.bat` | GA4 + Search Console recap email |
+| 04:04:04 | WebSumm | `websum.bat` | Web stats recap email |
 | 11:59:55 | LogSumm | `logsumm.bat` | Email log summary (noon) |
 | 23:59:55 | LogSumm | `logsumm.bat` | Email log summary (midnight) |
 
