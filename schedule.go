@@ -235,7 +235,7 @@ func main() {
 
 	// daily jobs
 	scheduler.Every().Day().At("00:02:01").Run(rotateLog)
-	scheduler.Every().Day().At("00:05:05").Run(me_archiver)
+	// scheduler.Every().Day().At("00:05:05").Run(me_archiver)
 	scheduler.Every().Day().At("00:03:03").Run(delage)
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("03:33:10").Run(webby)
