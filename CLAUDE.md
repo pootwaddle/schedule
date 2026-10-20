@@ -22,6 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 00:00:01 | RotateLog | (internal) | Log file rotation |
 | 00:02:02 | DelOldLogs | `DELAGE.BAT` | Delete old log files |
 | 00:03:03 | DelAge | `delage.bat` | File retention cleanup |
+| 00:04:04 | Retention | `retention.bat` | Retention cleanup by `C:\AUTOJOB\retention.yaml`, emails results (see `retention` repo); dry-run trial beside DelAge |
 | 00:23:23 | Backup | `backup_to_brooks.bat` | C: and D: drive backup to Brooks NAS |
 | 03:33:05 | BirdBuddy | `birdbuddy.bat` | Bird Buddy data processing |
 | 03:33:10 | WebbyStats | `webby.bat` | Web statistics processing |

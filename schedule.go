@@ -173,6 +173,16 @@ func main() {
 		}
 	}
 
+	retention := func() {
+		displayName := "Retention 🧹"
+		slogger.With("job", displayName).Info("Running job")
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\retention.bat")
+		err := cmd.Run()
+		if err != nil {
+			slogger.With("job", displayName, "error", err).Error("Job failed")
+		}
+	}
+
 	jobcheck := func() {
 		displayName := "JobCheck ✅"
 		slogger.With("job", displayName).Info("Running job")
@@ -249,6 +259,7 @@ func main() {
 	scheduler.Every().Day().At("00:02:01").Run(rotateLog)
 	// scheduler.Every().Day().At("00:05:05").Run(me_archiver)
 	scheduler.Every().Day().At("00:03:03").Run(delage)
+	scheduler.Every().Day().At("00:04:04").Run(retention) // -dry-run trial beside delage; replaces it after
 	scheduler.Every().Day().At("00:23:23").Run(backup)
 	scheduler.Every().Day().At("03:33:10").Run(webby)
 	scheduler.Every().Day().At("03:33:15").Run(daytmpl)
