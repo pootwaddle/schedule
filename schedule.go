@@ -34,7 +34,10 @@ func main() {
 	backup := func() {
 		displayName := "Backup 💾"
 		slogger.With("job", displayName).Info("Running job")
-		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup_to_brooks.bat")
+		// backup.bat runs backup.exe (backup.yaml), which emails its result. It
+		// replaced backup_to_brooks.bat, which failed here every night (robocopy
+		// logon failure to \\brooks) while always exiting 0.
+		cmd := exec.Command("CMD", "/C", "C:\\AUTOJOB\\backup.bat")
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			slogger.With("job", displayName, "error", err, "output", string(out)).Error("Job failed")
