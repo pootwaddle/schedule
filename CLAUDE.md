@@ -32,6 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 03:45:15 | GSCReport | `gsc.bat` | Search Console daily collection |
 | 03:50:00 | GoogleSumm | `googlesumm.bat` | GA4 + Search Console recap email |
 | 04:04:04 | WebSumm | `websum.bat` | Web stats recap email |
+| 04:30:00 | JobCheck | `jobcheck.bat` | Nightly job-status digest email (see `jobcheck` repo) |
 | 11:59:55 | LogSumm | `logsumm.bat` | Email log summary (noon) |
 | 23:59:55 | LogSumm | `logsumm.bat` | Email log summary (midnight) |
 
