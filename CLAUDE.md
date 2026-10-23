@@ -46,6 +46,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |----------|-----|-----------|---------|
 | 2 min | CleanGrey | `grey.bat` | Greylist cleanup |
 | 5 min | LogParse | `logparse.bat` | SMTP log parsing |
+| 5 min | IMAPBlock | `imapblock.bat` | IMAP login failures -> deny list + IMAP firewall rules |
 | 7 min | SpamParse | `spamparse.bat` | Spam analysis |
 | 9 min | Heartbeat | (internal) | Liveness log message |
 | 303 min | RiverCheck | `river.bat` | River level check (~5h 3m) |
